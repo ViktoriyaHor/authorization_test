@@ -1,0 +1,27 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title AuthorizationTest
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+  %body
+    %nav.container-fluid.navbar.navbar-expand-lg.sticky-top.bg-light.navbar-light.menu
+      .w-75.mx-auto.text-center
+        %button.navbar-toggler{:class => "mx-auto", :data => {:target => "#navbarSupportedContent", :toggle => "collapse"}, :type => "button", :aria => {:controls => "navbarSupportedContent", :expanded => "false", :label => "Toggle navigation"}}
+          %span.navbar-toggler-icon
+        .collapse.navbar-collapse#navbarSupportedContent
+          %ul.navbar-nav.mr-auto
+            -#- if user_signed_in?
+            -#  %li.nav-item{:class => current_class?('/profile')}
+            -#    = link_to , profile_path, class: "nav-link"
+            -#  %li.nav-item
+            -#    = link_to , destroy_user_session_path, method: :delete, class: "nav-link"
+            -#- else
+            -#  %li.nav-item{:class => current_class?('/users/sign_in')}
+            -#    = link_to , new_user_session_path, class: "nav-link"
+            -#  %li.nav-item{:class => current_class?('/users/sign_up')}
+            -#    = link_to , new_user_registration_path, class: "nav-link"
+    = yield
