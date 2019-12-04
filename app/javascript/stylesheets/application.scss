@@ -1,3 +1,9 @@
 @import './bootstrap_custom.scss';
 
+.field_with_errors {
+  color: #721c24;
+  input{
+    border: 1px solid #721c24;
+  }
+  }
 
