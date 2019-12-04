@@ -1,0 +1,9 @@
+= form_tag second_factor_path do
+  .qrcode.m-5
+    = raw @qrcode.as_html
+  .form-group
+    = label_tag 'confirmation_code'
+    = text_field_tag 'confirmation_code', "",class:  'form-control'
+  .actions
+    = button_tag "Save", class: 'btn btn-primary'
+

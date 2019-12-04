@@ -1,6 +1,8 @@
-class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+require 'rotp'
 
+class UsersController < ApplicationController
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :second_factor, :second_factor_setup]
+  #before_action :second_factor, only: :create
   # GET /users
   # GET /users.json
   def index
@@ -24,10 +26,13 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(user_params)
+    secret_key = ROTP::Base32.random
+    @user = User.new(user_params.merge( { secret_key: secret_key }))
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        #raise 111
+        format.html { redirect_to second_factor_path(@user)}
+        #format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -60,6 +65,24 @@ class UsersController < ApplicationController
     end
   end
 
+  def second_factor
+    totp = ROTP::TOTP.new(@user.secret_key)
+    str = totp.provisioning_uri(@user.email)
+    @qrcode = RQRCode::QRCode.new(str, :size => 10, :level => :h )
+  end
+
+  def second_factor_setup
+    totp = ROTP::TOTP.new(@user.secret_key)
+    respond_to do |format|
+      if totp.verify(params[:confirmation_code])
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
+      else
+        @user.delete
+        format.html { redirect_to signup_path, alert: 'Confirmation code is wrong, please sign up' }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -68,6 +91,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
+      params.require(:user).permit(:email, :password, :password_confirmation, :confirmation_code)
     end
 end

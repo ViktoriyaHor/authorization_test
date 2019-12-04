@@ -4,7 +4,8 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by_email(params[:session][:email])
-    if user && user.authenticate(params[:session][:password])
+    totp = ROTP::TOTP.new(user.secret_key)
+    if user && user.authenticate(params[:session][:password]) && totp.verify(params[:session][:second_factor_authentication_code])
       log_in user
       redirect_to root_url, notice: "Logged in!"
     else

@@ -22,9 +22,12 @@
                 = link_to 'Sign Up', signup_path, class: "nav-link"
               %li.nav-item{:class => current_class?('/login')}
                 = link_to 'Log In', login_path, class: "nav-link"
+          %ul.navbar-nav
+            %li.nav-item{:class => current_class?('/users')}
+              = link_to 'All users', users_path, class: "nav-link"
 
     = render "layouts/errors"
     = render "users/errors"
+    .container
+      = yield
 
-    = yield
-    = debug(params) if Rails.env.development?
