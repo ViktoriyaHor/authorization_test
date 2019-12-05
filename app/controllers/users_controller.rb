@@ -32,7 +32,6 @@ class UsersController < ApplicationController
       if @user.save
         #raise 111
         format.html { redirect_to second_factor_path(@user)}
-        #format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -68,7 +67,7 @@ class UsersController < ApplicationController
   def second_factor
     totp = ROTP::TOTP.new(@user.secret_key)
     str = totp.provisioning_uri(@user.email)
-    @qrcode = RQRCode::QRCode.new(str, :size => 10, :level => :h )
+    @qrcode = RQRCode::QRCode.new(str, :size => 6, :level => :q )
   end
 
   def second_factor_setup
