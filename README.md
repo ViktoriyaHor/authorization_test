@@ -1,24 +1,8 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Functionality
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+An user is allowed to register an account with email address and password (I don't use
+devise, but use has_secure_password)
+After account creation, a user has to setup a 2-nd factor authentication using
+https://github.com/mdp/rotp and https://github.com/whomwah/rqrcode
